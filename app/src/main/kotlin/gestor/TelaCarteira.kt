@@ -85,17 +85,5 @@ fun TelaCarteira(repo: Repositorio) {
         )
 
         Spacer(Modifier.height(12.dp))
-        Button(onClick = {
-            val h = LocalDate.now()
-            repo.adicionar(Transacao(h.minusDays(30), "VWCE", "etf", Tipo.COMPRA, 10.0, 100.0))
-            repo.adicionar(Transacao(h.minusDays(20), "VWCE", "etf", Tipo.COMPRA, 10.0, 120.0))
-            repo.adicionar(Transacao(h.minusDays(10), "BTC", "cripto", Tipo.COMPRA, 0.01, 60000.0))
-            repo.adicionar(Transacao(h.minusDays(5), "DP_BANCO", "deposito", Tipo.COMPRA, 500.0, 1.0))
-            repo.definirPreco("VWCE", 125.0)
-            repo.definirPreco("BTC", 65000.0)
-            atualizar()
-        }) {
-            Text("Carregar dados de exemplo")
-        }
     }
 }

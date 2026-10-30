@@ -11,7 +11,7 @@ import androidx.compose.ui.window.application
 @Composable
 fun App(repo: Repositorio) {
     var aba by remember { mutableStateOf(0) }
-    val titulos = listOf("Carteira", "Nova transação", "Preços")
+    val titulos = listOf("Carteira", "Nova transação", "Preços", "Histórico")
 
     Column(Modifier.fillMaxSize()) {
         Row(
@@ -29,13 +29,15 @@ fun App(repo: Repositorio) {
         when (aba) {
             0 -> TelaCarteira(repo)
             1 -> TelaNovaTransacao(repo)
-            else -> TelaPrecos(repo)
+            2 -> TelaPrecos(repo)
+            else -> TelaHistorico(repo)
         }
     }
 }
 
 fun main() = application {
-    val repo = remember { Repositorio("dev.db") }   // base de testes; a real vem depois
+    val pasta = java.io.File(System.getProperty("user.home"), ".gestor-investimentos").apply { mkdirs() }
+    val repo = remember { Repositorio(java.io.File(pasta, "investimentos.db").path) }
     Window(
         onCloseRequest = {
             repo.close()
