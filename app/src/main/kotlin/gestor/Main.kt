@@ -1,25 +1,50 @@
 package gestor
 
-import java.io.File
-import java.time.LocalDate
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.application
 
-fun main() {
-    File("teste.db").delete()                 // começa sempre do zero neste teste
+@Composable
+fun App(repo: Repositorio) {
+    var aba by remember { mutableStateOf(0) }
+    val titulos = listOf("Carteira", "Nova transação", "Preços")
 
-    Repositorio("teste.db").use { repo ->
-        repo.adicionar(Transacao(LocalDate.of(2026, 10, 1), "vwce", "etf", Tipo.COMPRA, 10.0, 100.0))
-        repo.adicionar(Transacao(LocalDate.of(2026, 10, 10), "VWCE", "etf", Tipo.COMPRA, 10.0, 120.0))
-        repo.definirPreco("VWCE", 125.0)
+    Column(Modifier.fillMaxSize()) {
+        Row(
+            Modifier.fillMaxWidth().padding(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            titulos.forEachIndexed { i, t ->
+                if (aba == i) Button(onClick = { aba = i }) { Text(t) }
+                else OutlinedButton(onClick = { aba = i }) { Text(t) }
+            }
+        }
+        HorizontalDivider()
 
-        runCatching {
-            repo.adicionar(Transacao(LocalDate.of(2026, 10, 15), "VWCE", "etf", Tipo.VENDA, 100.0, 125.0))
-        }.onFailure { println("Recusado: ${it.message}") }
+        // Ao trocar de separador a tela é recriada, por isso volta a ler os dados atuais.
+        when (aba) {
+            0 -> TelaCarteira(repo)
+            1 -> TelaNovaTransacao(repo)
+            else -> TelaPrecos(repo)
+        }
+    }
+}
 
-        for (l in repo.carteira()) {
-            println(
-                "${l.posicao.ativo}: qtd=${l.posicao.qtd}, médio=${l.posicao.medio}, " +
-                "valor=${l.valor}, L/P=${"%.1f".format(l.lucroPct)}%"
-            )
+fun main() = application {
+    val repo = remember { Repositorio("dev.db") }   // base de testes; a real vem depois
+    Window(
+        onCloseRequest = {
+            repo.close()
+            exitApplication()
+        },
+        title = "Gestor de Investimentos"
+    ) {
+        MaterialTheme {
+            Surface(Modifier.fillMaxSize()) { App(repo) }
         }
     }
 }

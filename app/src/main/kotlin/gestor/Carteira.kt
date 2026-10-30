@@ -62,4 +62,3 @@ fun pesoPorClasse(linhas: List<Linha>): Map<String, Double> {
     return linhas.groupBy { it.posicao.classe }
         .mapValues { (_, l) -> 100 * l.sumOf { it.valor } / total }
 }
-
