@@ -10,3 +10,7 @@ build
 *.db
 *.db-journal
 *.swp
+.kotlin/
+*.db
+*.db-journal
+*.swp

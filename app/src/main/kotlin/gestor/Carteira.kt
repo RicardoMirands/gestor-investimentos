@@ -63,12 +63,3 @@ fun pesoPorClasse(linhas: List<Linha>): Map<String, Double> {
         .mapValues { (_, l) -> 100 * l.sumOf { it.valor } / total }
 }
 
-fun main() {
-    val ts = listOf(
-        Transacao(LocalDate.of(2026, 10, 1), "VWCE", "etf", Tipo.COMPRA, 10.0, 100.0),
-        Transacao(LocalDate.of(2026, 10, 10), "VWCE", "etf", Tipo.COMPRA, 10.0, 120.0),
-    )
-    val p = calcularPosicoes(ts).getValue("VWCE")
-    println("Quantidade: ${p.qtd}, custo médio: ${p.medio}")   // 20.0 e 110.0
-    println(Linha(p, 125.0).lucro)                             // 300.0
-}

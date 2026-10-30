@@ -19,6 +19,7 @@ repositories {
 }
 
 dependencies {
+    implementation("org.xerial:sqlite-jdbc:3.46.1.3")
     // Use JUnit Jupiter for testing.
     testImplementation(libs.junit.jupiter)
 
@@ -37,7 +38,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = "gestor.CarteiraKt"
+    mainClass = "gestor.MainKt"
 }
 
 tasks.named<Test>("test") {
